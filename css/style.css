@@ -1,0 +1,220 @@
+/*
+COLORS:
+
+Light green: #7ed56f
+Medium green: #55c57a
+Dark green: #28b485
+
+*/
+
+/* 推荐的默认初始设置 */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  /* 强制让 box-sizing inherit */
+  box-sizing: inherit;
+}
+
+html {
+  /* Root Font Size */
+  /* 浏览器默认是 16px，设定为 16px 的适当百分比即可 */
+  font-size: 62.5%;
+}
+
+body {
+  /* 和 font 有关系的都要放到 body 下 -> Inheritance */
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #777;
+  /* 给整个页面加上一个 padding */
+  padding: 3rem;
+  /* border-box -> padding 和 border 不会算作 width */
+  box-sizing: border-box;
+}
+
+.header {
+  height: 95vh;
+  /* 注意这里 linear-gradient 的使用法，在图片上方放一个带有透明度的 gradient */
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(127, 213, 112, 0.8),
+      rgba(40, 180, 133, 0.8)
+    ),
+    url(../img/hero.jpg);
+  background-size: cover;
+  background-position: top;
+  /* 斜切整个 header */
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  /* logo-box 的 parent element，所以需要设定 position 为 relative */
+  position: relative;
+}
+
+.header__logo-box {
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+}
+
+.header__logo {
+  height: 3.5rem;
+}
+
+.header__text-box {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  /* top 和 left 从整个 div 的中心开始测量，而不是左上角 */
+  transform: translate(-50%, -50%);
+  /* 将 <a> 和文字居中 */
+  text-align: center;
+}
+
+.heading-primary {
+  color: #fff;
+  text-transform: uppercase;
+
+  backface-visibility: hidden;
+  margin-bottom: 6rem;
+}
+
+.heading-primary--main {
+  /* span 是 inline element，转换成 block 以强制改行 */
+  display: block;
+  font-size: 6rem;
+  font-weight: 400;
+  letter-spacing: 3.5rem;
+  /* 使用再 @keyframes 中定义的 animation */
+  animation-name: moveInLeft;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+
+  /* 延迟动画开始的时间 */
+  /* animation-delay: 3s; */
+  /* 重复三遍动画 */
+  /* animation-iteration-count: 3 */
+}
+
+.heading-primary--sub {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1.6rem;
+  /* 包含了 animation-name, animation-duration, animation-timing-function */
+  animation: moveInRight 1s ease-out;
+}
+
+/* :link    -> 未访问的链接 */
+/* :visited -> 已访问的链接 */
+/* 修改 <a> 的 style 时，记住不要修改 <a> 本身，而是 :link 和 :visited */
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1.5rem 4rem;
+  /* <a> 是 inline element，设置 padding 后就会与其他 element 冲突，所以设置为 inline-block */
+  display: inline-block;
+  border-radius: 10rem;
+  /* 更简单的定义 animation 的方法 */
+  /* 注意 transition 必须在 initial state 定义 */
+  /* 比如在 hover 和 active 中定义的 transform 都会被渲染为 animation */
+  /* all -> All the properties are enabled to be animated */
+  transition: all 0.2s;
+  /* ::after 的 relative */
+  position: relative;
+  font-size: 1.6rem;
+}
+
+.btn--white {
+  background-color: #fff;
+  color: #777;
+}
+
+.btn--animated {
+  /* @keyframes 中的动画名，动画时间，动画 effect，delay */
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  /* Apply the style of 0% in @keyframes before the animation starts */
+  animation-fill-mode: backwards;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+/* :active -> when clicked */
+.btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+/* The ::after selector inserts something after the content of each selected element */
+/* 在 btn 后面新加一个 btn */
+.btn::after {
+  /* 必须 指定 content 和 display 才能出现在画面上 */
+  content: '';
+  display: inline-block;
+  /* 100% height and width of btn */
+  height: 100%;
+  width: 100%;
+  border-radius: 10rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  /* 为 .btn:hover::after 中的 transform 指定 animation effect */
+  transition: all 0.4s;
+}
+
+.btn--white::after {
+  background-color: #fff;
+}
+
+.btn:hover::after {
+  /* 分别指定 x轴和 y轴 方法的比率 */
+  transform: scaleX(1.4) scaleY(1.6);
+  /* Fade out */
+  opacity: 0;
+}
+
+/* 定义要使用的 Animation */
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+  80% {
+    transform: translateX(1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem);
+  }
+  80% {
+    transform: translateX(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
